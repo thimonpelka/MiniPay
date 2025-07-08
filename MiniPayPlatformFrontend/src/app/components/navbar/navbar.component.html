@@ -1,0 +1,30 @@
+<nav class="bg-yellow-400 text-black-400 shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+
+      <!-- Logo -->
+      <div class="flex-shrink-0 text-2xl font-bold text-black-400">
+        <!-- Replace with an <img> tag if you have an image logo -->
+        <span>MiniPay Admin Panel</span>
+      </div>
+
+      <!-- Nav Links -->
+      <div class="flex space-x-4">
+        <a
+          routerLink="/providers"
+          routerLinkActive="text-black bg-black-400"
+          class="px-3 py-2 rounded-md text-large font-bold hover:bg-gray-200 hover:text-black transition cursor-pointer"
+        >
+          Payment Providers
+        </a>
+        <a
+          routerLink="/simulate"
+          routerLinkActive="text-black bg-black-400"
+          class="px-3 py-2 rounded-md text-large font-bold hover:bg-gray-200 hover:text-black transition cursor-pointer"
+        >
+          Simulate Transaction
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
