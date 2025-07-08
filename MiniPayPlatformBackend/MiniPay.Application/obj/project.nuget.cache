@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "KK+DviUZON0=",
+  "success": true,
+  "projectFilePath": "T:\\2 - Coding\\csharp\\MiniPayPlatform\\MiniPayPlatformBackend\\MiniPay.Application\\MiniPay.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\thimo\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.6\\microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
+    "C:\\Users\\thimo\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
