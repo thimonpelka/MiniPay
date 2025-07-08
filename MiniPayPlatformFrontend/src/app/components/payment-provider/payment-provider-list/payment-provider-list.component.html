@@ -2,17 +2,22 @@
   <!-- Add New Provider Button -->
   <div class="flex justify-between items-center">
     <h2 class="text-2xl font-bold text-gray-800">Payment Providers</h2>
-    <button
-      class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer"
-      (click)="addNewPaymentProvider()"
-    >
-      + Add Provider
-    </button>
+
+    <div class="flex gap-2">
+      <button class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
+        (click)="loadPaymentProviders()">
+        Refresh
+      </button>
+      <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer"
+        (click)="addNewPaymentProvider()">
+        + Add Provider
+      </button>
+    </div>
   </div>
 
   <!-- Providers List -->
-  <div *ngFor="let provider of paymentProviders" class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white rounded-xl shadow-sm p-4 gap-4 hover:shadow-md transition-shadow">
-
+  <div *ngFor="let provider of paymentProviders"
+    class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white rounded-xl shadow-sm p-4 gap-4 hover:shadow-md transition-shadow">
     <!-- Provider Info -->
     <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-2 text-md">
       <div>
@@ -29,8 +34,12 @@
       </div>
       <div>
         <div class="text-gray-500">Status</div>
-        <div [ngClass]="provider.isActive ? 'text-green-600 font-medium' : 'text-red-600 font-medium'">
-          {{ provider.isActive ? 'Active' : 'Inactive' }}
+        <div [ngClass]="
+            provider.isActive
+              ? 'text-green-600 font-medium'
+              : 'text-red-600 font-medium'
+          ">
+          {{ provider.isActive ? "Active" : "Inactive" }}
         </div>
       </div>
       <div class="col-span-full" *ngIf="provider.description">
@@ -41,24 +50,23 @@
 
     <!-- Action Buttons -->
     <div class="flex flex-wrap gap-2 md:flex-row md:items-end">
-      <button
-        class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-700 transition-colors cursor-pointer"
-        (click)="selectPaymentProvider(provider)"
-      >
+      <button class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
+        (click)="selectPaymentProvider(provider)">
         Select
       </button>
-      <button
-        class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors cursor-pointer"
-        (click)="editPaymentProvider(provider)"
-      >
+      <button class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors cursor-pointer"
+        (click)="editPaymentProvider(provider)">
         Edit
       </button>
-      <button
-        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors cursor-pointer"
-        (click)="deletePaymentProvider(provider)"
-      >
+      <button class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors cursor-pointer"
+        (click)="deletePaymentProvider(provider)">
         Delete
       </button>
     </div>
+  </div>
+
+  <!-- No Providers Message -->
+  <div *ngIf="paymentProviders.length === 0" class="text-center text-gray-500">
+    No payment providers available. Click "Add Provider" to create one.
   </div>
 </div>
