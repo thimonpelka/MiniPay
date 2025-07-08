@@ -8,15 +8,14 @@ namespace MiniPay.Application.Controllers
     [Route("api/[controller]")]
     public class PaymentProviderController : ControllerBase
     {
-        #region Constructor
         private readonly IPaymentProviderService _paymentProviderService;
         private readonly ILogger<PaymentProviderController> _logger;
+
         public PaymentProviderController(IPaymentProviderService paymentProviderService, ILogger<PaymentProviderController> logger)
         {
-            this._paymentProviderService = paymentProviderService;
-            this._logger = logger;
+            _paymentProviderService = paymentProviderService;
+            _logger = logger;
         }
-        #endregion
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PaymentProviderDto>>> GetAllAsync()
@@ -24,7 +23,7 @@ namespace MiniPay.Application.Controllers
             _logger.LogInformation("Getting all payment providers");
 
             // Call the service to get all payment providers
-            var forecasts = await this._paymentProviderService.GetAllAsync();
+            var forecasts = await _paymentProviderService.GetAllAsync();
 
             return Ok(forecasts);
         }
@@ -34,7 +33,7 @@ namespace MiniPay.Application.Controllers
         {
             _logger.LogInformation($"Getting payment provider with ID: {id}");
 
-            var result = await this._paymentProviderService.GetByIdAsync(id);
+            var result = await _paymentProviderService.GetByIdAsync(id);
 
             if (!result.IsSuccess || result.Data == null)
             {
@@ -54,7 +53,7 @@ namespace MiniPay.Application.Controllers
 
             _logger.LogInformation("Creating a new payment provider");
 
-            var result = await this._paymentProviderService.CreateAsync(createDto);
+            var result = await _paymentProviderService.CreateAsync(createDto);
 
             if (!result.IsSuccess || result.Data == null)
             {
@@ -76,7 +75,7 @@ namespace MiniPay.Application.Controllers
 
             _logger.LogInformation($"Updating payment provider with ID: {id}");
 
-            var result = await this._paymentProviderService.UpdateAsync(id, updateDto);
+            var result = await _paymentProviderService.UpdateAsync(id, updateDto);
 
             if (!result.IsSuccess || result.Data == null)
             {
@@ -92,7 +91,7 @@ namespace MiniPay.Application.Controllers
         {
             _logger.LogInformation($"Deleting payment provider with ID: {id}");
 
-            var result = await this._paymentProviderService.DeleteAsync(id);
+            var result = await _paymentProviderService.DeleteAsync(id);
 
             if (!result)
             {
