@@ -1,6 +1,6 @@
 @MiniPay.Application_HostAddress = http://localhost:8080
 
-GET {{MiniPay.Application_HostAddress}}/weatherforecast/
+GET {{MiniPay.Application_HostAddress}}/api/
 Accept: application/json
 
 ###

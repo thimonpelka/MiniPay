@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiniPay.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33ab326f381f8962704ec92666fa6bc2315565e4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+484f71704dfef09d4826193a300866681f3c3d5e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiniPay.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiniPay.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
