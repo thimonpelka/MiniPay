@@ -1,5 +1,7 @@
 docker-compose up -d
 
+docker-compose -f docker-compose-minimal.yml up -d
+
 possible future improvements:
 - proper url validation in backend. maybe automatic testing on creation if url is valid/exists
 - authentication (+ user system? admin, "normal" user, etc.)
