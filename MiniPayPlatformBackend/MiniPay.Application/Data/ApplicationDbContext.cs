@@ -8,7 +8,11 @@ namespace MiniPay.Application.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-			Database.EnsureCreated(); // Ensure the database is created on startup
+			try {
+				Database.EnsureCreated(); // Ensure the database is created on startup
+			} catch (Exception ex) {
+				Console.WriteLine($"An error occurred while ensuring the database is created: {ex.Message}");
+			}
         }
 
         public required DbSet<PaymentProvider> PaymentProviders { get; set; }

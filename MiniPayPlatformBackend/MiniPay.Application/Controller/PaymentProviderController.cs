@@ -23,9 +23,14 @@ namespace MiniPay.Application.Controllers
             _logger.LogInformation("Getting all payment providers");
 
             // Call the service to get all payment providers
-            var forecasts = await _paymentProviderService.GetAllAsync();
+            var result = await _paymentProviderService.GetAllAsync();
 
-            return Ok(forecasts);
+			if (!result.IsSuccess || result.Data == null)
+			{
+				return StatusCode(result.ErrorCode, result.ErrorMessage);
+			}
+
+            return Ok(result.Data);
         }
 
         [HttpGet("{id}")]
@@ -37,7 +42,7 @@ namespace MiniPay.Application.Controllers
 
             if (!result.IsSuccess || result.Data == null)
             {
-                return NotFound($"Payment provider with ID {id} not found.");
+				return StatusCode(result.ErrorCode, result.ErrorMessage);
             }
 
             return Ok(result.Data);
@@ -57,8 +62,7 @@ namespace MiniPay.Application.Controllers
 
             if (!result.IsSuccess || result.Data == null)
             {
-				_logger.LogError($"Error creating payment provider: {result.ErrorMessage}");
-                return BadRequest(new { error = result.ErrorMessage });
+				return StatusCode(result.ErrorCode, result.ErrorMessage);
             }
 
             // return CreatedAtAction(nameof(GetByIdAsync), new { id = result.Data.Id }, result.Data);
@@ -79,8 +83,7 @@ namespace MiniPay.Application.Controllers
 
             if (!result.IsSuccess || result.Data == null)
             {
-				_logger.LogError($"Error updating payment provider with ID {id}: {result.ErrorMessage}");
-                return BadRequest(new { error = result.ErrorMessage });
+				return StatusCode(result.ErrorCode, result.ErrorMessage);
             }
 
             return Ok(result.Data);
@@ -93,9 +96,9 @@ namespace MiniPay.Application.Controllers
 
             var result = await _paymentProviderService.DeleteAsync(id);
 
-            if (!result)
+            if (!result.IsSuccess)
             {
-                return NotFound($"Payment provider with ID {id} not found.");
+				return StatusCode(result.ErrorCode, result.ErrorMessage);
             }
 
             return NoContent();
