@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PaymentProviderDto } from '../../../dto/paymentProviderDto';
 import { PaymentProviderService } from '../../../services/payment-provider.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment-provider-list',
@@ -15,6 +16,7 @@ export class PaymentProviderListComponent {
 
   constructor(
     private paymentProviderService: PaymentProviderService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -43,12 +45,18 @@ export class PaymentProviderListComponent {
   }
 
   deletePaymentProvider(provider: PaymentProviderDto) {
-    // Logic to handle deleting a payment provider
-    console.log('Delete Payment Provider:', provider);
+    this.paymentProviderService.deletePaymentProvider(provider.id.toString()).subscribe({
+      next: () => {
+        this.loadPaymentProviders(); // Reload the list after deletion
+      },
+      error: (err) => {
+        console.error('Error deleting payment provider', err);
+      }
+    });
   }
 
   addNewPaymentProvider() {
-    // Logic to handle adding a new payment provider
-    console.log('Add New Payment Provider');
+    // Navigate to the create form for a new payment provider
+    this.router.navigate(['/providers/create']);
   }
 }
