@@ -1,6 +1,6 @@
 import random
-import time
 import string
+import time
 from datetime import datetime
 
 from flask import Flask, jsonify, request
@@ -18,7 +18,6 @@ def process_payment():
     try:
         # Get JSON data from request
         data = request.get_json()
-
         # Validate required fields
         required_fields = ["amount", "currency", "description", "referenceId"]
         for field in required_fields:
@@ -33,9 +32,7 @@ def process_payment():
                     ),
                     400,
                 )
-
         time.sleep(0.3)  # Simulate processing delay
-
         # Simulate payment processing
         response = {
             "status": "Success",
@@ -44,9 +41,7 @@ def process_payment():
             "message": "Payment processed successfully",
             "referenceId": data["referenceId"],
         }
-
         return jsonify(response), 200
-
     except Exception as e:
         print(f"Error processing payment: {e}")
         return (

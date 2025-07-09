@@ -22,6 +22,7 @@ namespace MiniPay.Application.Models {
 
 	/*
 	 * Currency enum represents the supported currencies in the MiniPay application.
+	 * TODO: Add more currencies as needed.
 	 */
 	public enum Currency {
 		USD,
@@ -30,5 +31,8 @@ namespace MiniPay.Application.Models {
 		JPY,
 		AUD,
 		CAD,
+		CNY,
+		INR,
+		RUB,
 	}
 }
