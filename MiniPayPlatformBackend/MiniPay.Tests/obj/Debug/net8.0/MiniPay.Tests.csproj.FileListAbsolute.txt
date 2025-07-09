@@ -167,3 +167,4 @@ T:\2 - Coding\csharp\MiniPayPlatform\MiniPayPlatformBackend\MiniPay.Tests\bin\De
 T:\2 - Coding\csharp\MiniPayPlatform\MiniPayPlatformBackend\MiniPay.Tests\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 T:\2 - Coding\csharp\MiniPayPlatform\MiniPayPlatformBackend\MiniPay.Tests\bin\Debug\net8.0\MiniPay.Application.dll
 T:\2 - Coding\csharp\MiniPayPlatform\MiniPayPlatformBackend\MiniPay.Tests\bin\Debug\net8.0\MiniPay.Application.pdb
+T:\2 - Coding\csharp\MiniPayPlatform\MiniPayPlatformBackend\MiniPay.Tests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll

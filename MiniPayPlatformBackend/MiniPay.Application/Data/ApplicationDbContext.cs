@@ -15,7 +15,7 @@ namespace MiniPay.Application.Data
 			}
         }
 
-        public required DbSet<PaymentProvider> PaymentProviders { get; set; }
+        public DbSet<PaymentProvider> PaymentProviders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
