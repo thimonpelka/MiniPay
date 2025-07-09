@@ -71,6 +71,10 @@ namespace MiniPay.Application.Services
             }
         }
 
+		/*
+		 * This class is responsible for mapping the API response to the TransactionResultDto.
+		 * It handles null checks and throws an exception if any required field is missing.
+		 */
         private static class MapResponseToDto
         {
             public static TransactionResultDto Map(PaymentApiResponse? apiResponse)
