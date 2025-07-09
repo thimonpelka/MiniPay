@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiniPay.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6bd2abbb79cdb02b8bf7f74eaebafbd7ff3fc4ef")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92a9a69c901875c3e2f78a27e94a11ede20987d9")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiniPay.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiniPay.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

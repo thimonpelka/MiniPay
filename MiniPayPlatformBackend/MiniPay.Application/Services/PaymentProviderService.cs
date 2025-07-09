@@ -158,6 +158,13 @@ namespace MiniPay.Application.Services
             try
             {
                 bool deleted = await _paymentProviderRepository.DeleteAsync(id);
+				
+				if (!deleted)
+				{
+					// If the deletion was not successful, return a failure result
+					return Result<bool>.Fail($"Payment provider with ID {id} could not be deleted.", 400);
+				}
+
                 return Result<bool>.Success(deleted);
             }
             catch (Exception ex)
