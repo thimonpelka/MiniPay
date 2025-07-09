@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    { provide: "API_URL", useValue: 'http://localhost:5090/api' }, provideAnimationsAsync(),
+    { provide: "API_URL", useValue: 'http://localhost:8080/api' }, provideAnimationsAsync(),
   ],
 };
