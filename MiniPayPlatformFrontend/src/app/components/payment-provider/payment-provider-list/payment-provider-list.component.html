@@ -19,7 +19,7 @@
   <div *ngFor="let provider of paymentProviders"
     class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white rounded-xl shadow-sm p-4 gap-4 hover:shadow-md transition-shadow">
     <!-- Provider Info -->
-    <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-2 text-md">
+    <div class="flex-1 md:w-3/5 grid grid-cols-2 md:grid-cols-4 gap-2 text-md">
       <div>
         <div class="text-gray-500">Name</div>
         <div class="font-medium text-gray-800">{{ provider.name }}</div>
@@ -49,10 +49,14 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex flex-wrap gap-2 md:flex-row md:items-end">
+    <div class="flex flex-wrap gap-2 md:flex-row md:items-end md:w-2/5 justify-end">
       <button class="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
         (click)="selectPaymentProvider(provider)">
-        View Details
+        View
+      </button>
+      <button class="w-28 px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-200 transition-colors cursor-pointer"
+        (click)="changeActiveStatus(provider)">
+        {{ provider.isActive ? "Deactivate" : "Activate" }}
       </button>
       <button class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors cursor-pointer"
         (click)="editPaymentProvider(provider)">

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { PaymentProviderDto } from '../../../dto/paymentProviderDto';
-import { PaymentProviderService } from '../../../services/payment-provider.service';
+import { PaymentProviderService } from '../../../services/payment-provider-service/payment-provider.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../services/notification-service/notification.service';
 
 @Component({
   selector: 'app-payment-provider-list',
@@ -16,6 +17,7 @@ export class PaymentProviderListComponent {
 
   constructor(
     private paymentProviderService: PaymentProviderService,
+    private notificationService: NotificationService,
     private router: Router,
   ) {}
 
@@ -34,14 +36,30 @@ export class PaymentProviderListComponent {
     });
   }
 
+  changeActiveStatus(provider: PaymentProviderDto) {
+    // Toggle the active status of the payment provider
+    provider.isActive = !provider.isActive;
+
+    this.paymentProviderService.updatePaymentProvider(provider).subscribe({
+      next: (updatedProvider) => {
+        // Update the local list with the updated provider
+        this.loadPaymentProviders();
+      },
+      error: (err) => {
+        console.error('Error updating payment provider status', err);
+        this.notificationService.showError(err);
+      }
+    });
+  }
+
   selectPaymentProvider(provider: PaymentProviderDto) {
     // Logic to handle payment provider selection
-    console.log('Selected Payment Provider:', provider);
+    this.router.navigate(['/providers', provider.id]);
   }
 
   editPaymentProvider(provider: PaymentProviderDto) {
-    // Logic to handle editing a payment provider
-    console.log('Edit Payment Provider:', provider);
+    // Navigate to the edit form for the selected payment provider
+    this.router.navigate(['/providers/edit', provider.id]);
   }
 
   deletePaymentProvider(provider: PaymentProviderDto) {
@@ -51,6 +69,7 @@ export class PaymentProviderListComponent {
       },
       error: (err) => {
         console.error('Error deleting payment provider', err);
+        this.notificationService.showError(err);
       }
     });
   }

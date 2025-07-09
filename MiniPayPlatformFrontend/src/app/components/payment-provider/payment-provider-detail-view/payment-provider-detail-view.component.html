@@ -1,0 +1,132 @@
+<!-- Payment Provider Detail View -->
+<div class="space-y-6">
+  <!-- Loading State -->
+  <div *ngIf="!paymentProvider" class="flex items-center justify-center py-12">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+      <p class="mt-2 text-gray-600">Loading payment provider...</p>
+    </div>
+  </div>
+
+  <!-- Provider Details -->
+  <div *ngIf="paymentProvider" class="bg-white rounded-xl shadow-sm border border-gray-200">
+    <!-- Status Banner -->
+    <div class="px-6 py-4 border-b border-gray-200" [ngClass]="
+        paymentProvider.isActive
+          ? 'bg-green-50 border-green-200'
+          : 'bg-red-50 border-red-200'
+      ">
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full" [ngClass]="paymentProvider.isActive ? 'bg-green-500' : 'bg-red-500'"></div>
+        <span class="font-medium" [ngClass]="
+            paymentProvider.isActive ? 'text-green-700' : 'text-red-700'
+          ">
+          {{ paymentProvider.isActive ? "Active" : "Inactive" }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Provider Information -->
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Basic Information -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">
+            Basic Information
+          </h2>
+
+          <div class="space-y-3">
+            <div>
+              <label class="text-sm font-medium text-gray-500">Provider Name</label>
+              <p class="text-gray-800 font-medium">
+                {{ paymentProvider.name }}
+              </p>
+            </div>
+
+            <div>
+              <label class="text-sm font-medium text-gray-500">Provider URL</label>
+              <p class="text-blue-600 break-all">
+                <a [href]="paymentProvider.url" target="_blank" class="hover:underline">
+                  {{ paymentProvider.url }}
+                </a>
+              </p>
+            </div>
+
+            <div>
+              <label class="text-sm font-medium text-gray-500">Currency</label>
+              <p class="text-gray-800 font-medium">
+                {{ paymentProvider.currency }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">
+            System Information
+          </h2>
+
+          <div class="space-y-3">
+            <div>
+              <label class="text-sm font-medium text-gray-500">Provider ID</label>
+              <p class="text-gray-800 font-mono">{{ paymentProvider.id }}</p>
+            </div>
+
+            <div>
+              <label class="text-sm font-medium text-gray-500">Created</label>
+              <p class="text-gray-800">
+                {{ paymentProvider.createdAt | date: "medium" }}
+              </p>
+            </div>
+
+            <div>
+              <label class="text-sm font-medium text-gray-500">Last Updated</label>
+              <p class="text-gray-800">
+                {{ paymentProvider.updatedAt | date: "medium" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description Section -->
+      <div class="mt-6" *ngIf="paymentProvider.description">
+        <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+          Description
+        </h2>
+        <div class="bg-gray-50 rounded-lg p-4">
+          <p class="text-gray-700 whitespace-pre-wrap">
+            {{ paymentProvider.description }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Empty Description State -->
+      <div class="mt-6" *ngIf="!paymentProvider.description">
+        <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+          Description
+        </h2>
+        <div class="bg-gray-50 rounded-lg p-4">
+          <p class="text-gray-500 italic">No description provided</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons (Mobile-friendly) -->
+  <div class="flex flex-wrap gap-3 justify-center md:justify-end" *ngIf="paymentProvider">
+    <button class="px-6 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-200 transition-colors cursor-pointer"
+      (click)="changeActiveStatus()">
+      {{ paymentProvider.isActive ? "Deactivate" : "Activate" }}
+    </button>
+    <button class="px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors cursor-pointer"
+      (click)="editPaymentProvider()">
+      Edit Provider
+    </button>
+    <button class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors cursor-pointer"
+      (click)="deletePaymentProvider()">
+      Delete Provider
+    </button>
+  </div>
+</div>

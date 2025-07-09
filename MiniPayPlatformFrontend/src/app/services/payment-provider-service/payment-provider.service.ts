@@ -2,9 +2,9 @@ import { APP_BASE_HREF } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PaymentProviderDto } from '../dto/paymentProviderDto';
-import { CreatePaymentProviderDto } from '../dto/createPaymentProviderDto';
-import { UpdatePaymentProviderDto } from '../dto/updatePaymentProviderDto';
+import { PaymentProviderDto } from '../../dto/paymentProviderDto';
+import { CreatePaymentProviderDto } from '../../dto/createPaymentProviderDto';
+import { UpdatePaymentProviderDto } from '../../dto/updatePaymentProviderDto';
 
 @Injectable({
   providedIn: 'root',

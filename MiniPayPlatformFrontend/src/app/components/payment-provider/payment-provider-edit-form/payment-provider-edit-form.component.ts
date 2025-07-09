@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   AbstractControl,
@@ -8,19 +9,19 @@ import {
   Validators,
 } from '@angular/forms';
 import { PaymentProviderService } from '../../../services/payment-provider-service/payment-provider.service';
-import { CreatePaymentProviderDto } from '../../../dto/createPaymentProviderDto';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../../services/notification-service/notification.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UpdatePaymentProviderDto } from '../../../dto/updatePaymentProviderDto';
 
 @Component({
-  selector: 'app-payment-provider-create-form',
+  selector: 'app-payment-provider-edit-form',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
-  templateUrl: './payment-provider-create-form.component.html',
-  styleUrl: './payment-provider-create-form.component.css',
+  templateUrl: './payment-provider-edit-form.component.html',
+  styleUrl: './payment-provider-edit-form.component.css',
 })
-export class PaymentProviderCreateFormComponent {
+export class PaymentProviderEditFormComponent {
+  id: string | null = null;
   paymentProviderForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
@@ -30,6 +31,7 @@ export class PaymentProviderCreateFormComponent {
     private paymentProviderService: PaymentProviderService,
     private notificationService: NotificationService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.paymentProviderForm = this.fb.group({
       name: [
@@ -57,6 +59,46 @@ export class PaymentProviderCreateFormComponent {
     });
   }
 
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      this.id = params.get('id');
+
+      if (!this.id) {
+        this.notificationService.showError('Invalid Route');
+        this.router.navigate(['/providers']);
+      }
+
+      this.loadPaymentProvider();
+    });
+  }
+
+  loadPaymentProvider() {
+    if (!this.id) {
+      this.notificationService.showError('Payment Provider ID is missing');
+      this.router.navigate(['/providers']);
+      return;
+    }
+
+    this.paymentProviderService.getPaymentProviderById(this.id).subscribe({
+      next: (response) => {
+        this.paymentProviderForm.patchValue({
+          name: response.name,
+          url: response.url,
+          isActive: response.isActive,
+          currency: response.currency,
+          description: response.description || '',
+        });
+      },
+      error: (error) => {
+        console.error('Error loading Payment Provider:', error);
+        this.notificationService.showError(
+          error.error || 'Failed to load payment provider',
+        );
+        this.router.navigate(['/providers']);
+      },
+    });
+  }
+
   onSubmit() {
     this.isSubmitted = true;
 
@@ -64,20 +106,23 @@ export class PaymentProviderCreateFormComponent {
 
     this.isLoading = true;
 
-    const newPaymentProvider: CreatePaymentProviderDto = {
+    const newPaymentProvider: UpdatePaymentProviderDto = {
       ...this.paymentProviderForm.value,
+      id: this.id,
     };
 
     this.paymentProviderService
-      .createPaymentProvider(newPaymentProvider)
+      .updatePaymentProvider(newPaymentProvider)
       .subscribe({
         next: (response) => {
-          console.log('Payment Provider created successfully:', response);
+          console.log('Payment Provider updated successfully:', response);
           this.router.navigate(['/providers']);
         },
         error: (error) => {
-          console.error('Error creating Payment Provider:', error);
-          this.notificationService.showError(error.error || 'Failed to create payment provider');
+          console.error('Error update Payment Provider:', error);
+          this.notificationService.showError(
+            error.error || 'Failed to update payment provider',
+          );
           this.isLoading = false;
           this.isSubmitted = false;
         },
