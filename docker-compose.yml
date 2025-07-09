@@ -8,3 +8,11 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "YourStrong!Passw0rd"
     restart: always
+
+  simplepaymentproviderservice:
+    build:
+      context: ./SimplePaymentProviderService
+    container_name: simplePaymentProviderService
+    ports:
+      - "5000:5000"
+    restart: always
