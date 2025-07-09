@@ -10,20 +10,18 @@
 
       <!-- Nav Links -->
       <div class="flex space-x-4">
-        <a
-          routerLink="/providers"
-          routerLinkActive="text-black bg-black-400"
+        <button
           class="px-3 py-2 rounded-md text-large font-bold hover:bg-gray-200 hover:text-black transition cursor-pointer"
+          (click)="goToPaymentProviders()"
         >
           Payment Providers
-        </a>
-        <a
-          routerLink="/simulate"
-          routerLinkActive="text-black bg-black-400"
+        </button>
+        <button
           class="px-3 py-2 rounded-md text-large font-bold hover:bg-gray-200 hover:text-black transition cursor-pointer"
+          (click)="goToSimulateTransaction()"
         >
           Simulate Transaction
-        </a>
+        </button>
       </div>
     </div>
   </div>
