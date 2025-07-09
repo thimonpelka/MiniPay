@@ -1,7 +1,7 @@
 public class Result<T>
 {
     public bool IsSuccess { get; set; }
-    public string? ErrorMessage { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
 	public int ErrorCode { get; set; }
     public T? Data { get; set; }
 

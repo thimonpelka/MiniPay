@@ -40,6 +40,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register own services using Depndency Injection
 builder.Services.AddScoped<MiniPay.Application.Services.IPaymentProviderService, MiniPay.Application.Services.PaymentProviderService>();
 builder.Services.AddScoped<MiniPay.Application.Repositories.IPaymentProviderRepository, MiniPay.Application.Repositories.PaymentProviderRepository>();
+builder.Services.AddScoped<MiniPay.Application.Services.ITransactionService, MiniPay.Application.Services.TransactionService>();
+builder.Services.AddHttpClient<MiniPay.Application.Services.IHTTPRequestService, MiniPay.Application.Services.HTTPRequestService>();
 
 var app = builder.Build();
 
