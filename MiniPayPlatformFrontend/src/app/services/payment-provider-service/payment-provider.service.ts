@@ -21,6 +21,12 @@ export class PaymentProviderService {
     );
   }
 
+  public getActivePaymentProviders(): Observable<PaymentProviderDto[]> {
+    return this.httpClient.get<PaymentProviderDto[]>(
+      `${this.apiUrl}/PaymentProvider?isActive=true`,
+    );
+  }
+
   public getPaymentProviderById(id: string): Observable<PaymentProviderDto> {
     return this.httpClient.get<PaymentProviderDto>(
       `${this.apiUrl}/PaymentProvider/${id}`,

@@ -23,8 +23,7 @@
             " required>
             <option value="-1" disabled>Select a payment provider</option>
             <option *ngFor="let provider of paymentProviders" [value]="provider.id">
-              {{ provider.name }} ({{ provider.currency }}) -
-              {{ provider.isActive ? "Active" : "Inactive" }}
+              {{ provider.name }} ({{ provider.currency }})
             </option>
           </select>
           <div *ngIf="

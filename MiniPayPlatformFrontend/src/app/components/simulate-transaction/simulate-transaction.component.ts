@@ -50,7 +50,7 @@ export class SimulateTransactionComponent {
   }
 
   loadPaymentProviders() {
-    this.paymentProviderService.getPaymentProviders().subscribe({
+    this.paymentProviderService.getActivePaymentProviders().subscribe({
       next: (providers) => {
         this.paymentProviders = providers;
       },
