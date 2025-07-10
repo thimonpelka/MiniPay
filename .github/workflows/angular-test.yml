@@ -1,0 +1,29 @@
+name: Angular Test
+on:
+  push:
+    paths:
+      - 'MiniPayPlatformFrontend/**'
+  pull_request:
+    paths:
+      - 'MiniPayPlatformFrontend/**'
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: MiniPayPlatformFrontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: MiniPayPlatformFrontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      # - name: Run tests
+      #   run: npm test -- --watch=false --browsers=ChromeHeadless
