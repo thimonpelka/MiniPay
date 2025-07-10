@@ -32,6 +32,7 @@ export class PaymentProviderListComponent {
       },
       error: (err) => {
         console.error('Error loading payment providers', err);
+        this.notificationService.showError(err.message || err.error || 'Failed to load payment providers');
       }
     });
   }
