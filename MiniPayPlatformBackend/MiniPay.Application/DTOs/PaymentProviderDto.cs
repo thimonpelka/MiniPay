@@ -67,11 +67,12 @@ namespace MiniPay.Application.DTOs
     }
 
 
-	/*
+    /*
 	 * @brief PaymentProviderQueryDto class represents the data transfer object for querying payment providers.
 	 * It allows filtering by active status.
 	 */
-	public class PaymentProviderQueryDto {
-		public bool? IsActive { get; set; }
-	}
+    public class PaymentProviderQueryDto
+    {
+        public bool? IsActive { get; set; }
+    }
 }

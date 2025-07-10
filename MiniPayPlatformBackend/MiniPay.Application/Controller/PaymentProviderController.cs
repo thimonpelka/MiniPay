@@ -5,8 +5,8 @@ using MiniPay.Application.DTOs;
 namespace MiniPay.Application.Controllers
 {
 	/**
-	 * @brief PaymentProviderController handles HTTP requests related to payment providers.
-	 */
+	* @brief PaymentProviderController handles HTTP requests related to payment providers.
+	*/
     [ApiController]
     [Route("api/[controller]")]
     public class PaymentProviderController : ControllerBase
@@ -42,7 +42,7 @@ namespace MiniPay.Application.Controllers
             return Ok(result.Data);
         }
 
-        /**
+		/**
 		 * @brief Returns a Payment Provider By Id
 		 *
 		 * @param id of payment provider to query
@@ -63,7 +63,7 @@ namespace MiniPay.Application.Controllers
             return Ok(result.Data);
         }
 
-        /**
+		/**
 		 * @brief Creates a new Payment Provider
 		 *
 		 * @param createDto Information to include in new payment provider
@@ -90,7 +90,7 @@ namespace MiniPay.Application.Controllers
             return StatusCode(201, result.Data);
         }
 
-        /**
+		/**
 		 * @brief Updates a Payment Provider
 		 *
 		 * @param id id of payment provider to update
@@ -117,7 +117,7 @@ namespace MiniPay.Application.Controllers
             return Ok(result.Data);
         }
 
-        /**
+		/**
 		 * @brief Deletes a Payment Provider by Id
 		 *
 		 * @param id id of provider to delete
