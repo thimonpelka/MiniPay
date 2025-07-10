@@ -41,6 +41,8 @@ _Disclaimer_: So far only a few currencies are supported, but it is very easy to
 - INR (Indian Rupee)
 - RUB (Russian Ruble)
 
+In case a different currency is requested the Backend will answer with an invalid currency response. This is mainly to detect typos and prevent human error.
+
 ## Architecture
 
 The platform follows a microservices architecture with clear separation of concerns:
