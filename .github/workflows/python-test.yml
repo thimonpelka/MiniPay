@@ -1,8 +1,8 @@
 name: Python Test
 on:
   push:
-    paths:
-      - 'SimplePaymentProviderService/**'
+    # paths:
+    #   - 'SimplePaymentProviderService/**'
   pull_request:
     paths:
       - 'SimplePaymentProviderService/**'

@@ -1,8 +1,8 @@
 name: Angular Test
 on:
   push:
-    paths:
-      - 'MiniPayPlatformFrontend/**'
+    # paths:
+    #   - 'MiniPayPlatformFrontend/**'
   pull_request:
     paths:
       - 'MiniPayPlatformFrontend/**'

@@ -2,8 +2,8 @@ name: .NET Test
 
 on:
   push:
-    paths:
-      - 'MiniPayPlatformBackend/**'
+    # paths:
+    #   - 'MiniPayPlatformBackend/**'
   pull_request:
     paths:
       - 'MiniPayPlatformBackend/**'
