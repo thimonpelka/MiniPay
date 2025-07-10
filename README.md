@@ -29,6 +29,18 @@ MiniPay Platform is a modular payment management system designed to streamline t
 - **Provider Status Control**: Activate/deactivate payment providers as needed
 - **Transaction Simulation**: Test payment provider configurations using a simple Python service
 
+_Disclaimer_: So far only a few currencies are supported, but it is very easy to add more. The current supported currencies are:
+
+- USD (US Dollar)
+- EUR (Euro)
+- GBP (British Pound)
+- JPY (Japanese Yen)
+- AUD (Australian Dollar)
+- CAD (Canadian Dollar)
+- CNY (Chinese Yuan)
+- INR (Indian Rupee)
+- RUB (Russian Ruble)
+
 ## Architecture
 
 The platform follows a microservices architecture with clear separation of concerns:
@@ -169,6 +181,23 @@ python src/app.py
 ```
 
 The service will be available at `http://localhost:5000`
+
+### Simulating Payments
+
+To test payment provider configurations, you can use the simple payment service. It provides an endpoint to simulate a payment. In order to access it from the frontend, you need to pass the correct url of the payment provider test services.
+
+If you run the test payment service in docker, you can use the following URL in the provider configuration:
+
+```
+http://host.docker.internal:5000/process-payment
+```
+
+If you run it locally, you can use:
+
+```
+http://localhost:5000/process-payment
+```
+
 
 ## API Documentation
 
