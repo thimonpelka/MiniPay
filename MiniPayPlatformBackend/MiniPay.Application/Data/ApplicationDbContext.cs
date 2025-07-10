@@ -8,21 +8,21 @@ namespace MiniPay.Application.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-			try {
-				Database.EnsureCreated(); // Ensure the database is created on startup
-			} catch (Exception ex) {
-				Console.WriteLine($"An error occurred while ensuring the database is created: {ex.Message}");
-			}
+            try {
+                Database.EnsureCreated(); // Ensure the database is created on startup
+            } catch (Exception ex) {
+                Console.WriteLine($"An error occurred while ensuring the database is created: {ex.Message}");
+            }
         }
 
         public DbSet<PaymentProvider> PaymentProviders { get; set; }
 
-		/**
-		 * @brief Configures the model for the application database context.
-		 *
-		 * @param modelBuilder The model builder used to configure the entity types.
-		 * @return void
-		 */
+        /**
+         * @brief Configures the model for the application database context.
+         *
+         * @param modelBuilder The model builder used to configure the entity types.
+         * @return void
+         */
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -43,24 +43,24 @@ namespace MiniPay.Application.Data
 
             modelBuilder.Entity<PaymentProvider>()
                 .Property(a => a.IsActive)
-				.IsRequired();
+                .IsRequired();
 
-			modelBuilder.Entity<PaymentProvider>()
-				.Property(a => a.Currency)
-				.IsRequired()
-				.HasConversion<string>(); // Convert enum to string for network compatibility
+            modelBuilder.Entity<PaymentProvider>()
+                .Property(a => a.Currency)
+                .IsRequired()
+                .HasConversion<string>(); // Convert enum to string for network compatibility
 
-			modelBuilder.Entity<PaymentProvider>()
-				.Property(a => a.Description)
-				.HasMaxLength(500);
+            modelBuilder.Entity<PaymentProvider>()
+                .Property(a => a.Description)
+                .HasMaxLength(500);
 
-			modelBuilder.Entity<PaymentProvider>()
-				.Property(a => a.CreatedAt)
-				.HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<PaymentProvider>()
+                .Property(a => a.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-			modelBuilder.Entity<PaymentProvider>()
-				.Property(a => a.UpdatedAt)
-				.HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<PaymentProvider>()
+                .Property(a => a.UpdatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
 }

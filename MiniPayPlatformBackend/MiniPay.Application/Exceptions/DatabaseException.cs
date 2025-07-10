@@ -2,8 +2,8 @@ namespace MiniPay.Application.Exceptions
 {
 
     /**
-	 * @brief DatabaseException class represents an exception that occurs during database operations.
-	 */
+     * @brief DatabaseException class represents an exception that occurs during database operations.
+     */
     [Serializable]
     public class DatabaseException : Exception
     {

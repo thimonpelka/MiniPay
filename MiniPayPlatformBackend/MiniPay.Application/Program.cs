@@ -11,12 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-	c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-	{
-		Title = "MiniPay API",
-		Version = "v1",
-		Description = "API for MiniPay Platform"
-	});
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "MiniPay API",
+        Version = "v1",
+        Description = "API for MiniPay Platform"
+    });
 });
 
 // Add CORS
@@ -34,8 +34,8 @@ builder.Services.AddCors(options =>
 // Configure Entity Framework Core with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-	// Setup SQL Server with connection string from appsettings.json
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    // Setup SQL Server with connection string from appsettings.json
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 // Register own services using Depndency Injection
@@ -49,12 +49,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI(c =>
-	{
-		c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-		c.RoutePrefix = "swagger"; // Set Swagger UI at the app's root
-	});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = "swagger"; // Set Swagger UI at the app's root
+    });
 }
 
 app.UseHttpsRedirection();

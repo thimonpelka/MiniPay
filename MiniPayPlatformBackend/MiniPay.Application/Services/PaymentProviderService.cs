@@ -5,9 +5,9 @@ using MiniPay.Application.DTOs;
 
 namespace MiniPay.Application.Services
 {
-	/**
-	 * @brief Service for managing payment providers.
-	 */
+    /**
+     * @brief Service for managing payment providers.
+     */
     public class PaymentProviderService : IPaymentProviderService
     {
         private readonly IPaymentProviderRepository _paymentProviderRepository;
@@ -17,12 +17,12 @@ namespace MiniPay.Application.Services
             _paymentProviderRepository = paymentProviderRepository;
         }
 
-		/**
-		 * @brief Retrieves all payment providers based on the provided query parameters.
-		 *
-		 * @param queryDto The query parameters for filtering.
-		 * @return A result containing a collection of payment provider DTOs or an error message.
-		 */
+        /**
+         * @brief Retrieves all payment providers based on the provided query parameters.
+         *
+         * @param queryDto The query parameters for filtering.
+         * @return A result containing a collection of payment provider DTOs or an error message.
+         */
         public async Task<Result<IEnumerable<PaymentProviderDto>>> GetAllAsync(PaymentProviderQueryDto queryDto)
         {
             // Attempt to retrieve all payment providers from the repository
@@ -41,12 +41,12 @@ namespace MiniPay.Application.Services
             return Result<IEnumerable<PaymentProviderDto>>.Success(paymentProviders.Select(MapPaymentProviderToDto));
         }
 
-		/**
-		 * @brief Retrieves a payment provider by its ID.
-		 *
-		 * @param id The ID of the payment provider to retrieve.
-		 * @return A result containing the payment provider DTO or an error message.
-		 */
+        /**
+         * @brief Retrieves a payment provider by its ID.
+         *
+         * @param id The ID of the payment provider to retrieve.
+         * @return A result containing the payment provider DTO or an error message.
+         */
         public async Task<Result<PaymentProviderDto>> GetByIdAsync(int id)
         {
             // Attempt to retrieve the payment provider by ID
@@ -57,7 +57,7 @@ namespace MiniPay.Application.Services
             }
             catch (Exception ex)
             {
-				// If an exception occurs, return a failure result
+                // If an exception occurs, return a failure result
                 return Result<PaymentProviderDto>.Fail($"An error occurred while retrieving the payment provider with ID {id}: {ex.Message}", 500);
             }
 
@@ -71,12 +71,12 @@ namespace MiniPay.Application.Services
             return Result<PaymentProviderDto>.Success(MapPaymentProviderToDto(paymentProvider));
         }
 
-		/**
-		 * @brief Creates a new payment provider.
-		 *
-		 * @param createDto The DTO containing the details of the payment provider to create.
-		 * @return A result containing the created payment provider DTO or an error message.
-		 */
+        /**
+         * @brief Creates a new payment provider.
+         *
+         * @param createDto The DTO containing the details of the payment provider to create.
+         * @return A result containing the created payment provider DTO or an error message.
+         */
         public async Task<Result<PaymentProviderDto>> CreateAsync(CreatePaymentProviderDto createDto)
         {
             // Validate the input DTO
@@ -113,13 +113,13 @@ namespace MiniPay.Application.Services
             return Result<PaymentProviderDto>.Success(MapPaymentProviderToDto(createdPaymentProvider));
         }
 
-		/**
-		 * @brief Updates an existing payment provider by its ID.
-		 *
-		 * @param id The ID of the payment provider to update.
-		 * @param updateDto The DTO containing the updated details of the payment provider.
-		 * @return A result containing the updated payment provider DTO or an error message.
-		 */
+        /**
+         * @brief Updates an existing payment provider by its ID.
+         *
+         * @param id The ID of the payment provider to update.
+         * @param updateDto The DTO containing the updated details of the payment provider.
+         * @return A result containing the updated payment provider DTO or an error message.
+         */
         public async Task<Result<PaymentProviderDto>> UpdateAsync(int id, UpdatePaymentProviderDto updateDto)
         {
             // Attempt to retrieve the existing payment provider by ID
@@ -130,7 +130,7 @@ namespace MiniPay.Application.Services
             }
             catch (Exception ex)
             {
-				// If an exception occurs, return a failure result
+                // If an exception occurs, return a failure result
                 return Result<PaymentProviderDto>.Fail($"An error occurred while retrieving the payment provider with ID {id}: {ex.Message}", 500);
             }
 
@@ -167,54 +167,54 @@ namespace MiniPay.Application.Services
             }
             catch (Exception ex)
             {
-				// If an exception occurs, return a failure result
+                // If an exception occurs, return a failure result
                 return Result<PaymentProviderDto>.Fail($"An error occurred while updating the payment provider with ID {id}: {ex.Message}", 500);
             }
 
-			// If the update failed and returned null, return a failure result
+            // If the update failed and returned null, return a failure result
             if (updatedPaymentProvider == null)
             {
                 return Result<PaymentProviderDto>.Fail($"Failed to update payment provider with ID {id}.", 500);
             }
 
-			// Return a success result with the mapped DTO
+            // Return a success result with the mapped DTO
             return Result<PaymentProviderDto>.Success(MapPaymentProviderToDto(updatedPaymentProvider));
         }
 
-		/**
-		 * @brief Deletes a payment provider by its ID.
-		 *
-		 * @param id The ID of the payment provider to delete.
-		 * @return A result indicating whether the deletion was successful or an error message.
-		 */
+        /**
+         * @brief Deletes a payment provider by its ID.
+         *
+         * @param id The ID of the payment provider to delete.
+         * @return A result indicating whether the deletion was successful or an error message.
+         */
         public async Task<Result<bool>> DeleteAsync(int id)
         {
-			// Attempt to delete the payment provider by ID
+            // Attempt to delete the payment provider by ID
             try
             {
                 bool deleted = await _paymentProviderRepository.DeleteAsync(id);
-				
-				if (!deleted)
-				{
-					// If the deletion was not successful, return a failure result
-					return Result<bool>.Fail($"Payment provider with ID {id} could not be deleted.", 400);
-				}
+                
+                if (!deleted)
+                {
+                    // If the deletion was not successful, return a failure result
+                    return Result<bool>.Fail($"Payment provider with ID {id} could not be deleted.", 400);
+                }
 
                 return Result<bool>.Success(deleted);
             }
             catch (Exception ex)
             {
-				// If an exception occurs, return a failure result
+                // If an exception occurs, return a failure result
                 return Result<bool>.Fail($"An error occurred while deleting the payment provider with ID {id}: {ex.Message}", 500);
             }
         }
 
-		/**
-		 * @brief Maps a PaymentProvider entity to a PaymentProviderDto.
-		 *
-		 * @param paymentProvider The PaymentProvider entity to map.
-		 * @return A PaymentProviderDto containing the mapped values.
-		 */
+        /**
+         * @brief Maps a PaymentProvider entity to a PaymentProviderDto.
+         *
+         * @param paymentProvider The PaymentProvider entity to map.
+         * @return A PaymentProviderDto containing the mapped values.
+         */
         private static PaymentProviderDto MapPaymentProviderToDto(PaymentProvider paymentProvider)
         {
             return new PaymentProviderDto

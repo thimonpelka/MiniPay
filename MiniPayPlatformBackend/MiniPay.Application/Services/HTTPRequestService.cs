@@ -6,9 +6,9 @@ using System.Text.Json;
 
 namespace MiniPay.Application.Services
 {
-	/**
-	 * @brief HTTPRequestService class is responsible for sending HTTP requests to payment providers.
-	 */
+    /**
+     * @brief HTTPRequestService class is responsible for sending HTTP requests to payment providers.
+     */
     public class HTTPRequestService : IHTTPRequestService
     {
         private readonly HttpClient _httpClient = new HttpClient();
@@ -18,13 +18,13 @@ namespace MiniPay.Application.Services
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-		/**
-		 * @brief Sends an HTTP request to the payment provider's API to execute a transaction.
-		 *
-		 * @param requestDto The transaction request data containing details like amount, currency, description, and reference ID.
-		 * @param paymentProvider The payment provider to send a request to
-		 * @return Result object which, in a sucess case, contains the result of the transaction
-		 */
+        /**
+         * @brief Sends an HTTP request to the payment provider's API to execute a transaction.
+         *
+         * @param requestDto The transaction request data containing details like amount, currency, description, and reference ID.
+         * @param paymentProvider The payment provider to send a request to
+         * @return Result object which, in a sucess case, contains the result of the transaction
+         */
         public async Task<Result<TransactionResultDto>> sendHTTPRequest(TransactionRequestDto requestDto, PaymentProviderDto paymentProvider)
         {
             // Call asynchronous network methods in a try/catch block to handle exceptions.
@@ -72,28 +72,28 @@ namespace MiniPay.Application.Services
             {
                 return Result<TransactionResultDto>.Fail($"JSON parsing error: {e.Message}", 500);
             }
-			catch (APIResponseParsingException e)
-			{
-				return Result<TransactionResultDto>.Fail($"API response parsing error: {e.Message}", 500);
-			}
+            catch (APIResponseParsingException e)
+            {
+                return Result<TransactionResultDto>.Fail($"API response parsing error: {e.Message}", 500);
+            }
             catch (Exception e)
             {
                 return Result<TransactionResultDto>.Fail($"Unexpected error: {e.Message}", 500);
             }
         }
 
-		/*
-		 * @brief This class is responsible for mapping the API response to the TransactionResultDto.
-		 * It handles null checks and throws an exception if any required field is missing.
-		 */
+        /*
+         * @brief This class is responsible for mapping the API response to the TransactionResultDto.
+         * It handles null checks and throws an exception if any required field is missing.
+         */
         private static class MapResponseToDto
         {
-			/**
-			 * @brief Maps the response of the API to a TransactionResultDto object
-			 *
-			 * @param apiResponse Response of the api
-			 * @return valid TransactionResultDto object or throws an APIResponseParsingException
-			 */
+            /**
+             * @brief Maps the response of the API to a TransactionResultDto object
+             *
+             * @param apiResponse Response of the api
+             * @return valid TransactionResultDto object or throws an APIResponseParsingException
+             */
             public static TransactionResultDto Map(PaymentApiResponse? apiResponse)
             {
                 if (apiResponse == null)

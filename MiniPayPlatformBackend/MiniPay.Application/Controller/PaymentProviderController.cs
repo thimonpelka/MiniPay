@@ -4,9 +4,9 @@ using MiniPay.Application.DTOs;
 
 namespace MiniPay.Application.Controllers
 {
-	/**
-	* @brief PaymentProviderController handles HTTP requests related to payment providers.
-	*/
+    /**
+    * @brief PaymentProviderController handles HTTP requests related to payment providers.
+    */
     [ApiController]
     [Route("api/[controller]")]
     public class PaymentProviderController : ControllerBase
@@ -42,12 +42,12 @@ namespace MiniPay.Application.Controllers
             return Ok(result.Data);
         }
 
-		/**
-		 * @brief Returns a Payment Provider By Id
-		 *
-		 * @param id of payment provider to query
-		 * @return A single Payment Provider or null
-		 */
+        /**
+         * @brief Returns a Payment Provider By Id
+         *
+         * @param id of payment provider to query
+         * @return A single Payment Provider or null
+         */
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentProviderDto>> GetByIdAsync(int id)
         {
@@ -63,12 +63,12 @@ namespace MiniPay.Application.Controllers
             return Ok(result.Data);
         }
 
-		/**
-		 * @brief Creates a new Payment Provider
-		 *
-		 * @param createDto Information to include in new payment provider
-		 * @return Newly created object
-		 */
+        /**
+         * @brief Creates a new Payment Provider
+         *
+         * @param createDto Information to include in new payment provider
+         * @return Newly created object
+         */
         [HttpPost]
         public async Task<ActionResult<PaymentProviderDto>> CreateAsync(CreatePaymentProviderDto createDto)
         {
@@ -90,13 +90,13 @@ namespace MiniPay.Application.Controllers
             return StatusCode(201, result.Data);
         }
 
-		/**
-		 * @brief Updates a Payment Provider
-		 *
-		 * @param id id of payment provider to update
-		 * @param updateDto new information to set payment provider data to
-		 * @return 
-		 */
+        /**
+         * @brief Updates a Payment Provider
+         *
+         * @param id id of payment provider to update
+         * @param updateDto new information to set payment provider data to
+         * @return 
+         */
         [HttpPut("{id}")]
         public async Task<ActionResult<PaymentProviderDto>> UpdateAsync(int id, UpdatePaymentProviderDto updateDto)
         {
@@ -117,12 +117,12 @@ namespace MiniPay.Application.Controllers
             return Ok(result.Data);
         }
 
-		/**
-		 * @brief Deletes a Payment Provider by Id
-		 *
-		 * @param id id of provider to delete
-		 * @return No Content & 204 if succesful
-		 */
+        /**
+         * @brief Deletes a Payment Provider by Id
+         *
+         * @param id id of provider to delete
+         * @return No Content & 204 if succesful
+         */
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
