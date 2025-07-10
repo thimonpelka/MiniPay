@@ -1,7 +1,7 @@
 namespace MiniPay.Application.Models {
 
 	/*
-	 * PaymentProvider class represents a payment provider in the MiniPay application.
+	 * @brief PaymentProvider class represents a payment provider in the MiniPay application.
 	 */
 	public class PaymentProvider {
 		public int Id { get; set; }
@@ -21,7 +21,8 @@ namespace MiniPay.Application.Models {
 	}
 
 	/*
-	 * Currency enum represents the supported currencies in the MiniPay application.
+	 * @brief Currency enum represents the supported currencies in the MiniPay application.
+	 *
 	 * TODO: Add more currencies as needed.
 	 */
 	public enum Currency {

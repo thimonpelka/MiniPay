@@ -1,10 +1,10 @@
 using Moq;
 using Moq.Protected;
-using MiniPay.Application.DTOs;
-using MiniPay.Application.Services;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using MiniPay.Application.DTOs;
+using MiniPay.Application.Services;
 
 namespace MiniPay.Tests.Services
 {

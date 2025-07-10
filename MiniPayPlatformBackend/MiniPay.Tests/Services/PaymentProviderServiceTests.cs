@@ -4,7 +4,6 @@ using MiniPay.Application.DTOs;
 using MiniPay.Application.Services;
 using MiniPay.Application.Repositories;
 
-
 namespace MiniPay.Tests.Services
 {
     public class PaymentProviderServiceTests

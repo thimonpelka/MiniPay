@@ -17,6 +17,12 @@ namespace MiniPay.Application.Data
 
         public DbSet<PaymentProvider> PaymentProviders { get; set; }
 
+		/**
+		 * @brief Configures the model for the application database context.
+		 *
+		 * @param modelBuilder The model builder used to configure the entity types.
+		 * @return void
+		 */
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MiniPay.Application.DTOs;
 using MiniPay.Application.Services;
 using MiniPay.Application.Controllers;
+using MiniPay.Application.Shared;
 
 namespace MiniPay.Tests.Services
 {

@@ -1,7 +1,7 @@
 namespace MiniPay.Application.DTOs {
 
 	/*
-	 * This class represents the result of a transaction.
+	 * @brief This class represents the result of a transaction.
 	 */
 	public class TransactionResultDto {
 		public required string Status { get; set; }

@@ -3,6 +3,9 @@ using MiniPay.Application.DTOs;
 
 namespace MiniPay.Application.Repositories
 {
+	/**
+	 * @brief IPaymentProviderRepository interface defines the contract for payment provider repository operations.
+	 */
 	public interface IPaymentProviderRepository
 	{
 		Task<IEnumerable<PaymentProvider>> GetAllAsync(PaymentProviderQueryDto queryDto);

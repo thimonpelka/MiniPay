@@ -4,7 +4,7 @@ namespace MiniPay.Application.DTOs
 {
 
     /*
-	 * PaymentProviderDto class represents the data transfer object of a payment provider in the MiniPay application.
+	 * @brief PaymentProviderDto class represents the data transfer object of a payment provider in the MiniPay application.
 	 */
     public class PaymentProviderDto
     {
@@ -25,7 +25,7 @@ namespace MiniPay.Application.DTOs
     }
 
     /*
-	 * CreatePaymentProviderDto class represents the data transfer object for creating a new payment provider.
+	 * @brief CreatePaymentProviderDto class represents the data transfer object for creating a new payment provider.
 	 */
     public class CreatePaymentProviderDto
     {
@@ -46,7 +46,7 @@ namespace MiniPay.Application.DTOs
     }
 
     /*
-	 * UpdatePaymentProviderDto class represents the data transfer object for updating an existing payment provider.
+	 * @brief UpdatePaymentProviderDto class represents the data transfer object for updating an existing payment provider.
 	 */
     public class UpdatePaymentProviderDto
     {
@@ -67,6 +67,10 @@ namespace MiniPay.Application.DTOs
     }
 
 
+	/*
+	 * @brief PaymentProviderQueryDto class represents the data transfer object for querying payment providers.
+	 * It allows filtering by active status.
+	 */
 	public class PaymentProviderQueryDto {
 		public bool? IsActive { get; set; }
 	}

@@ -1,6 +1,7 @@
 using Moq;
 using MiniPay.Application.DTOs;
 using MiniPay.Application.Services;
+using MiniPay.Application.Shared;
 
 namespace MiniPay.Tests.Services
 {

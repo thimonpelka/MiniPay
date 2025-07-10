@@ -4,6 +4,9 @@ using MiniPay.Application.Services;
 
 namespace MiniPay.Application.Controllers
 {
+	/**
+	 * @brief TransactionController handles HTTP requests related to transactions.
+	 */
 	[ApiController]
 	[Route("api/[controller]")]
 	public class TransactionController : ControllerBase {
@@ -15,6 +18,12 @@ namespace MiniPay.Application.Controllers
 			_logger = logger;
 		}
 
+		/**
+		 * @brief Executes a transaction based on the provided request data.
+		 *
+		 * @param createDto The transaction request data containing details like sender, receiver, amount, etc.
+		 * @return Returns a TransactionResultDto containing the result of the transaction execution.
+		 */
 		[HttpPost]
 		public async Task<ActionResult<TransactionResultDto>> ExecuteTransactionAsync(TransactionRequestDto createDto) {
 			if (!ModelState.IsValid) {

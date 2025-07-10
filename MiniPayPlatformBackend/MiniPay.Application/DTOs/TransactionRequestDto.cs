@@ -1,6 +1,6 @@
 namespace MiniPay.Application.DTOs {
 	/*
-	 * This class represents a request to initiate a transaction.
+	 * @brief This class represents a request to initiate a transaction.
 	 */
 	public class TransactionRequestDto {
 		public required int PaymentProviderId { get; set; }
