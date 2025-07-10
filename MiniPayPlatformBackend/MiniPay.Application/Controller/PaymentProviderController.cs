@@ -18,12 +18,12 @@ namespace MiniPay.Application.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PaymentProviderDto>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<PaymentProviderDto>>> GetAllAsync([FromQuery] PaymentProviderQueryDto queryParams)
         {
             _logger.LogInformation("Getting all payment providers");
 
             // Call the service to get all payment providers
-            var result = await _paymentProviderService.GetAllAsync();
+            var result = await _paymentProviderService.GetAllAsync(queryParams);
 
 			if (!result.IsSuccess || result.Data == null)
 			{

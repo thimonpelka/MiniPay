@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniPay.Application.Data;
 using MiniPay.Application.Repositories;
 using MiniPay.Application.Models;
+using MiniPay.Application.DTOs;
 
 namespace MiniPay.Tests.Repositories
 {
@@ -9,6 +10,10 @@ namespace MiniPay.Tests.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IPaymentProviderRepository _repository;
+
+		// Query DTOs for testing
+		private PaymentProviderQueryDto _emptyQueryDto = new PaymentProviderQueryDto {};
+		private PaymentProviderQueryDto _isActiveQueryDto = new PaymentProviderQueryDto { IsActive = true };
 
         public PaymentProviderRepositoryTests()
         {
@@ -55,13 +60,26 @@ namespace MiniPay.Tests.Repositories
         public async Task GetAllAsync_ShouldReturnAllPaymentProviders()
         {
             // Act
-            var result = await _repository.GetAllAsync();
+            var result = await _repository.GetAllAsync(_emptyQueryDto);
 
             // Assert
             Assert.Equal(3, result.Count());
             Assert.Equal("Provider 1", result.First().Name);
             Assert.Equal("Provider 3", result.Last().Name);
         }
+
+		[Fact]
+		public async Task GetAllAsync_ShouldReturnActivePaymentProviders_WhenQueryIsActive()
+		{
+			// Act
+			var result = await _repository.GetAllAsync(_isActiveQueryDto);
+
+			// Assert
+			Assert.Equal(2, result.Count());
+			Assert.All(result, p => Assert.True(p.IsActive));
+			Assert.Equal("Provider 1", result.First().Name);
+			Assert.Equal("Provider 2", result.Last().Name);
+		}
 
 		[Fact]
 		public async Task GetByIdAsync_ShouldReturnPaymentProvider_WhenExists()

@@ -1,10 +1,11 @@
 using MiniPay.Application.Models;
+using MiniPay.Application.DTOs;
 
 namespace MiniPay.Application.Repositories
 {
 	public interface IPaymentProviderRepository
 	{
-		Task<IEnumerable<PaymentProvider>> GetAllAsync();
+		Task<IEnumerable<PaymentProvider>> GetAllAsync(PaymentProviderQueryDto queryDto);
 		Task<PaymentProvider?> GetByIdAsync(int id);
 		Task<PaymentProvider> CreateAsync(PaymentProvider paymentProvider);
 		Task<PaymentProvider?> UpdateAsync(int id, PaymentProvider paymentProvider);

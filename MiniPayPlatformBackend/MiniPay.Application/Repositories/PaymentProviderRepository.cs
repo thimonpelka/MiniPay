@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using MiniPay.Application.DTOs;
 using MiniPay.Application.Data;
 using MiniPay.Application.Models;
-using MiniPay.Application.Exceptions;
 
 namespace MiniPay.Application.Repositories
 {
@@ -17,9 +17,16 @@ namespace MiniPay.Application.Repositories
         /*
 		 * Retrieves all payment providers from the database, ordered by creation date.
 		 */
-        public async Task<IEnumerable<PaymentProvider>> GetAllAsync()
+        public async Task<IEnumerable<PaymentProvider>> GetAllAsync(PaymentProviderQueryDto queryDto)
         {
-            return await _context.PaymentProviders
+            var query = _context.PaymentProviders.AsQueryable();
+
+            if (queryDto.IsActive.HasValue)
+            {
+                query = query.Where(p => p.IsActive == queryDto.IsActive.Value);
+            }
+
+            return await query
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
         }

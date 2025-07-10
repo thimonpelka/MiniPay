@@ -14,6 +14,9 @@ namespace MiniPay.Tests.Services
 
         private List<PaymentProvider> _mockPaymentProviders;
 
+		// Query DTOs for testing
+		private PaymentProviderQueryDto _emptyQueryDto = new PaymentProviderQueryDto {};
+		private PaymentProviderQueryDto _isActiveQueryDto = new PaymentProviderQueryDto { IsActive = true };
 
         public PaymentProviderServiceTests()
         {
@@ -51,18 +54,36 @@ namespace MiniPay.Tests.Services
         [Fact]
         public async Task GetAllAsync_ShouldReturnAllPaymentProviders()
         {
-            _paymentProviderRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(_mockPaymentProviders);
+            _paymentProviderRepositoryMock.Setup(repo => repo.GetAllAsync(_emptyQueryDto)).ReturnsAsync(_mockPaymentProviders);
 
             // Act
-            var result = await _paymentProviderService.GetAllAsync();
+            var result = await _paymentProviderService.GetAllAsync(_emptyQueryDto);
 
-
+			// Assert
             Assert.True(result.IsSuccess);
             Assert.NotNull(result.Data);
             Assert.Equal(3, result.Data.Count());
             Assert.Equal("Provider 1", result.Data.First().Name);
             Assert.Equal("Provider 3", result.Data.Last().Name);
         }
+
+		[Fact]
+		public async Task GetAllAsync_ShouldReturnActivePaymentProviders_WhenQueryIsActive()
+		{
+			var activeProviders = _mockPaymentProviders.Where(p => p.IsActive).ToList();
+			_paymentProviderRepositoryMock.Setup(repo => repo.GetAllAsync(_isActiveQueryDto)).ReturnsAsync(activeProviders);
+
+			// Act
+			var result = await _paymentProviderService.GetAllAsync(_isActiveQueryDto);
+
+			// Assert
+			Assert.True(result.IsSuccess);
+			Assert.NotNull(result.Data);
+			Assert.Equal(2, result.Data.Count());
+			Assert.All(result.Data, p => Assert.True(p.IsActive));
+			Assert.Equal("Provider 1", result.Data.First().Name);
+			Assert.Equal("Provider 2", result.Data.Last().Name);
+		}
 
         [Fact]
         public async Task GetByIdAsync_ShouldReturnPaymentProvider_WhenExists()

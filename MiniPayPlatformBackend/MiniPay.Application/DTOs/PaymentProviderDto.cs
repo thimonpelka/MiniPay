@@ -66,4 +66,8 @@ namespace MiniPay.Application.DTOs
         public string? Description { get; set; }
     }
 
+
+	public class PaymentProviderQueryDto {
+		public bool? IsActive { get; set; }
+	}
 }

@@ -13,13 +13,13 @@ namespace MiniPay.Application.Services
             _paymentProviderRepository = paymentProviderRepository;
         }
 
-        public async Task<Result<IEnumerable<PaymentProviderDto>>> GetAllAsync()
+        public async Task<Result<IEnumerable<PaymentProviderDto>>> GetAllAsync(PaymentProviderQueryDto queryDto)
         {
             // Attempt to retrieve all payment providers from the repository
             IEnumerable<PaymentProvider> paymentProviders;
             try
             {
-                paymentProviders = await _paymentProviderRepository.GetAllAsync();
+                paymentProviders = await _paymentProviderRepository.GetAllAsync(queryDto);
             }
             catch (Exception ex)
             {

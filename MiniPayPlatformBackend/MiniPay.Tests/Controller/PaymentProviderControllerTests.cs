@@ -14,6 +14,10 @@ namespace MiniPay.Tests.Services
 
         private List<PaymentProviderDto> _mockPaymentProviders;
 
+		// Query DTOs for testing
+		private PaymentProviderQueryDto _emptyQueryDto = new PaymentProviderQueryDto {};
+		private PaymentProviderQueryDto _isActiveQueryDto = new PaymentProviderQueryDto { IsActive = true };
+
         public PaymentProviderControllerTests()
         {
             _paymentProviderServiceMock = new Mock<IPaymentProviderService>();
@@ -51,12 +55,12 @@ namespace MiniPay.Tests.Services
         {
             // Arrange
             _paymentProviderServiceMock
-                .Setup(s => s.GetAllAsync())
+                .Setup(s => s.GetAllAsync(_emptyQueryDto))
                 .ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
                 .Success(_mockPaymentProviders));
 
             // Act
-            var result = await _controller.GetAllAsync();
+            var result = await _controller.GetAllAsync(_emptyQueryDto);
 
             // Assert
             Assert.IsType<ActionResult<IEnumerable<PaymentProviderDto>>>(result);
@@ -65,10 +69,62 @@ namespace MiniPay.Tests.Services
             var actionResult = result.Result as OkObjectResult;
             Assert.NotNull(actionResult);
             Assert.Equal(200, actionResult.StatusCode);
+
             var returnedProviders = actionResult.Value as IEnumerable<PaymentProviderDto>;
             Assert.NotNull(returnedProviders);
             Assert.Equal(_mockPaymentProviders, returnedProviders);
         }
+
+		[Fact]
+		public async Task GetAll_ShouldReturnOkResult_WhenNoProvidersExist()
+		{
+			// Arrange
+			_paymentProviderServiceMock
+				.Setup(s => s.GetAllAsync(_emptyQueryDto))
+				.ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
+				.Success(new List<PaymentProviderDto>()));
+
+			// Act
+			var result = await _controller.GetAllAsync(_emptyQueryDto);
+
+			// Assert
+			Assert.IsType<ActionResult<IEnumerable<PaymentProviderDto>>>(result);
+
+			// Extract the actual result
+			var actionResult = result.Result as OkObjectResult;
+			Assert.NotNull(actionResult);
+			Assert.Equal(200, actionResult.StatusCode);
+
+			var returnedProviders = actionResult.Value as IEnumerable<PaymentProviderDto>;
+			Assert.NotNull(returnedProviders);
+			Assert.Empty(returnedProviders);
+		}
+
+		[Fact]
+		public async Task GetAll_ShouldReturnOkResult_WhenProvidersExistWithActiveFilter()
+		{
+			// Arrange
+			_paymentProviderServiceMock
+				.Setup(s => s.GetAllAsync(_isActiveQueryDto))
+				.ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
+				.Success(_mockPaymentProviders.Where(p => p.IsActive)));
+
+			// Act
+			var result = await _controller.GetAllAsync(_isActiveQueryDto);
+
+			// Assert
+			Assert.IsType<ActionResult<IEnumerable<PaymentProviderDto>>>(result);
+
+			// Extract the actual result
+			var actionResult = result.Result as OkObjectResult;
+			Assert.NotNull(actionResult);
+			Assert.Equal(200, actionResult.StatusCode);
+
+			var returnedProviders = actionResult.Value as IEnumerable<PaymentProviderDto>;
+			Assert.NotNull(returnedProviders);
+			Assert.Equal(2, returnedProviders.Count());
+			Assert.All(returnedProviders, p => Assert.True(p.IsActive));
+		}
 
         [Fact]
         public async Task GetById_ShouldReturnOkResult_WhenProviderExists()
@@ -119,12 +175,12 @@ namespace MiniPay.Tests.Services
         {
             // Arrange
             _paymentProviderServiceMock
-                .Setup(s => s.GetAllAsync())
+                .Setup(s => s.GetAllAsync(_emptyQueryDto))
                 .ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
                 .Fail("Internal server error", 500));
 
             // Act
-            var result = await _controller.GetAllAsync();
+            var result = await _controller.GetAllAsync(_emptyQueryDto);
 
             // Assert
             Assert.IsType<ActionResult<IEnumerable<PaymentProviderDto>>>(result);
