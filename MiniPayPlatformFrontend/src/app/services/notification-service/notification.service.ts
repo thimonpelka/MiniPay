@@ -10,6 +10,9 @@ export class NotificationService {
     private snackBar: MatSnackBar,
   ) { }
 
+  /**
+   * @param message - The message to display in the notification.
+   */
   showError(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000,
