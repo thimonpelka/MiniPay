@@ -3,6 +3,7 @@ using MiniPay.Application.Models;
 using MiniPay.Application.DTOs;
 using MiniPay.Application.Services;
 using MiniPay.Application.Repositories;
+using MiniPay.Application.Exceptions;
 
 namespace MiniPay.Tests.Services
 {
@@ -13,9 +14,9 @@ namespace MiniPay.Tests.Services
 
         private List<PaymentProvider> _mockPaymentProviders;
 
-		// Query DTOs for testing
-		private PaymentProviderQueryDto _emptyQueryDto = new PaymentProviderQueryDto {};
-		private PaymentProviderQueryDto _isActiveQueryDto = new PaymentProviderQueryDto { IsActive = true };
+        // Query DTOs for testing
+        private PaymentProviderQueryDto _emptyQueryDto = new PaymentProviderQueryDto { };
+        private PaymentProviderQueryDto _isActiveQueryDto = new PaymentProviderQueryDto { IsActive = true };
 
         public PaymentProviderServiceTests()
         {
@@ -58,7 +59,7 @@ namespace MiniPay.Tests.Services
             // Act
             var result = await _paymentProviderService.GetAllAsync(_emptyQueryDto);
 
-			// Assert
+            // Assert
             Assert.True(result.IsSuccess);
             Assert.NotNull(result.Data);
             Assert.Equal(3, result.Data.Count());
@@ -66,23 +67,23 @@ namespace MiniPay.Tests.Services
             Assert.Equal("Provider 3", result.Data.Last().Name);
         }
 
-		[Fact]
-		public async Task GetAllAsync_ShouldReturnActivePaymentProviders_WhenQueryIsActive()
-		{
-			var activeProviders = _mockPaymentProviders.Where(p => p.IsActive).ToList();
-			_paymentProviderRepositoryMock.Setup(repo => repo.GetAllAsync(_isActiveQueryDto)).ReturnsAsync(activeProviders);
+        [Fact]
+        public async Task GetAllAsync_ShouldReturnActivePaymentProviders_WhenQueryIsActive()
+        {
+            var activeProviders = _mockPaymentProviders.Where(p => p.IsActive).ToList();
+            _paymentProviderRepositoryMock.Setup(repo => repo.GetAllAsync(_isActiveQueryDto)).ReturnsAsync(activeProviders);
 
-			// Act
-			var result = await _paymentProviderService.GetAllAsync(_isActiveQueryDto);
+            // Act
+            var result = await _paymentProviderService.GetAllAsync(_isActiveQueryDto);
 
-			// Assert
-			Assert.True(result.IsSuccess);
-			Assert.NotNull(result.Data);
-			Assert.Equal(2, result.Data.Count());
-			Assert.All(result.Data, p => Assert.True(p.IsActive));
-			Assert.Equal("Provider 1", result.Data.First().Name);
-			Assert.Equal("Provider 2", result.Data.Last().Name);
-		}
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.NotNull(result.Data);
+            Assert.Equal(2, result.Data.Count());
+            Assert.All(result.Data, p => Assert.True(p.IsActive));
+            Assert.Equal("Provider 1", result.Data.First().Name);
+            Assert.Equal("Provider 2", result.Data.Last().Name);
+        }
 
         [Fact]
         public async Task GetByIdAsync_ShouldReturnPaymentProvider_WhenExists()
@@ -104,12 +105,19 @@ namespace MiniPay.Tests.Services
             _paymentProviderRepositoryMock.Setup(repo => repo.GetByIdAsync(999)).ReturnsAsync((PaymentProvider?)null);
 
             // Act
-            var result = await _paymentProviderService.GetByIdAsync(999);
+            try
+            {
+                var result = await _paymentProviderService.GetByIdAsync(999);
 
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Null(result.Data);
-            Assert.Equal("Payment provider with ID 999 not found.", result.ErrorMessage);
+                // If no exception is thrown, fail the test
+                Assert.Fail("Expected RetrievalException was not thrown.");
+            }
+            catch (Exception ex)
+            {
+                // Assert
+                Assert.IsType<RetrievalException>(ex);
+                Assert.Equal("Payment provider with ID 999 not found.", ex.Message);
+            }
         }
 
         [Fact]
@@ -145,94 +153,108 @@ namespace MiniPay.Tests.Services
             Assert.True(result.Data.IsActive);
         }
 
-		[Fact]
-		public async Task CreateAsync_ShouldReturnFailure_WhenInvalidCurrency()
-		{
-			var createDto = new CreatePaymentProviderDto
-			{
-				Name = "Invalid Currency Provider",
-				Url = "https://invalidcurrency.com",
-				Currency = "INVALID",
-				IsActive = true
-			};
+        [Fact]
+        public async Task CreateAsync_ShouldReturnFailure_WhenInvalidCurrency()
+        {
+            var createDto = new CreatePaymentProviderDto
+            {
+                Name = "Invalid Currency Provider",
+                Url = "https://invalidcurrency.com",
+                Currency = "INVALID",
+                IsActive = true
+            };
 
-			// Act
-			var result = await _paymentProviderService.CreateAsync(createDto);
+            // Act
+            try
+            {
 
-			// Assert
-			Assert.False(result.IsSuccess);
-			Assert.Null(result.Data);
-			Assert.Equal("Invalid currency: INVALID", result.ErrorMessage);
-			Assert.Equal(422, result.ErrorCode);
-		}
+                var result = await _paymentProviderService.CreateAsync(createDto);
 
-		[Fact]
-		public async Task UpdateAsync_ShouldUpdatePaymentProvider_WhenValidData()
-		{
-			var updateDto = new UpdatePaymentProviderDto
-			{
-				Name = "Updated Provider",
-				Url = "https://updatedprovider.com",
-				Currency = "EUR",
-				IsActive = false
-			};
+                // If no exception is thrown, fail the test
+                Assert.Fail("Expected ValidationException was not thrown.");
+            }
+            catch (Exception ex)
+            {
+                // Assert
+                Assert.IsType<ValidationException>(ex);
+                Assert.Equal("Invalid currency: INVALID", ex.Message);
+            }
+        }
 
-			_paymentProviderRepositoryMock.Setup(repo => repo.GetByIdAsync(100))
-				.ReturnsAsync(new PaymentProvider
-				{
-					Id = 100,
-					Name = "Old Provider",
-					Url = "https://oldprovider.com",
-					Currency = Currency.USD,
-					IsActive = true
-				});
+        [Fact]
+        public async Task UpdateAsync_ShouldUpdatePaymentProvider_WhenValidData()
+        {
+            var updateDto = new UpdatePaymentProviderDto
+            {
+                Name = "Updated Provider",
+                Url = "https://updatedprovider.com",
+                Currency = "EUR",
+                IsActive = false
+            };
 
-			_paymentProviderRepositoryMock.Setup(repo => repo.UpdateAsync(100, It.IsAny<PaymentProvider>()))
-				.ReturnsAsync(new PaymentProvider
-				{
-					Id = 100,
-					Name = updateDto.Name,
-					Url = updateDto.Url,
-					Currency = Currency.EUR,
-					IsActive = updateDto.IsActive
-				});
+            _paymentProviderRepositoryMock.Setup(repo => repo.GetByIdAsync(100))
+                .ReturnsAsync(new PaymentProvider
+                {
+                    Id = 100,
+                    Name = "Old Provider",
+                    Url = "https://oldprovider.com",
+                    Currency = Currency.USD,
+                    IsActive = true
+                });
 
-			// Act
-			var result = await _paymentProviderService.UpdateAsync(100, updateDto);
+            _paymentProviderRepositoryMock.Setup(repo => repo.UpdateAsync(100, It.IsAny<PaymentProvider>()))
+                .ReturnsAsync(new PaymentProvider
+                {
+                    Id = 100,
+                    Name = updateDto.Name,
+                    Url = updateDto.Url,
+                    Currency = Currency.EUR,
+                    IsActive = updateDto.IsActive
+                });
 
-			// Assert
-			Assert.True(result.IsSuccess);
-			Assert.NotNull(result.Data);
-			Assert.Equal("Updated Provider", result.Data.Name);
-			Assert.Equal("https://updatedprovider.com", result.Data.Url);
-			Assert.Equal("EUR", result.Data.Currency);
-			Assert.False(result.Data.IsActive);
-		}
+            // Act
+            var result = await _paymentProviderService.UpdateAsync(100, updateDto);
 
-		[Fact]
-		public async Task DeleteAsync_ShouldDeletePaymentProvider_WhenExists()
-		{
-			_paymentProviderRepositoryMock.Setup(repo => repo.DeleteAsync(1)).ReturnsAsync(true);
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.NotNull(result.Data);
+            Assert.Equal("Updated Provider", result.Data.Name);
+            Assert.Equal("https://updatedprovider.com", result.Data.Url);
+            Assert.Equal("EUR", result.Data.Currency);
+            Assert.False(result.Data.IsActive);
+        }
 
-			// Act
-			var result = await _paymentProviderService.DeleteAsync(1);
+        [Fact]
+        public async Task DeleteAsync_ShouldDeletePaymentProvider_WhenExists()
+        {
+            _paymentProviderRepositoryMock.Setup(repo => repo.DeleteAsync(1)).ReturnsAsync(true);
 
-			// Assert
-			Assert.True(result.IsSuccess);
-		}
+            // Act
+            var result = await _paymentProviderService.DeleteAsync(1);
 
-		[Fact]
-		public async Task DeleteAsync_ShouldReturnFailure_WhenNotExists()
-		{
-			_paymentProviderRepositoryMock.Setup(repo => repo.DeleteAsync(999)).ReturnsAsync(false);
+            // Assert
+            Assert.True(result.IsSuccess);
+        }
 
-			// Act
-			var result = await _paymentProviderService.DeleteAsync(999);
+        [Fact]
+        public async Task DeleteAsync_ShouldReturnFailure_WhenNotExists()
+        {
+            _paymentProviderRepositoryMock.Setup(repo => repo.DeleteAsync(999)).ReturnsAsync(false);
 
-			// Assert
-			Assert.False(result.IsSuccess);
-			Assert.Equal("Payment provider with ID 999 could not be deleted.", result.ErrorMessage);
-			Assert.Equal(400, result.ErrorCode);
-		}
+            // Act
+            try
+            {
+                var result = await _paymentProviderService.DeleteAsync(999);
+
+                // If no exception is thrown, fail the test
+                Assert.Fail("Expected WriteException was not thrown.");
+            }
+            catch (Exception ex)
+            {
+                // Assert
+                Assert.IsType<WriteException>(ex);
+                Assert.Equal("Payment provider with ID 999 could not be deleted. It may not exist or the deletion operation failed.", ex.Message);
+            }
+        }
     }
 }

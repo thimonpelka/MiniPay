@@ -2,6 +2,7 @@ using MiniPay.Application.Shared;
 using MiniPay.Application.Repositories;
 using MiniPay.Application.Models;
 using MiniPay.Application.DTOs;
+using MiniPay.Application.Exceptions;
 
 namespace MiniPay.Application.Services
 {
@@ -25,17 +26,8 @@ namespace MiniPay.Application.Services
          */
         public async Task<Result<IEnumerable<PaymentProviderDto>>> GetAllAsync(PaymentProviderQueryDto queryDto)
         {
-            // Attempt to retrieve all payment providers from the repository
-            IEnumerable<PaymentProvider> paymentProviders;
-            try
-            {
-                paymentProviders = await _paymentProviderRepository.GetAllAsync(queryDto);
-            }
-            catch (Exception ex)
-            {
-                // Return a failure result if an exception occurs
-                return Result<IEnumerable<PaymentProviderDto>>.Fail($"An error occurred while retrieving payment providers: {ex.Message}", 500);
-            }
+            // Retrieve all payment providers from the repository
+            IEnumerable<PaymentProvider> paymentProviders = await _paymentProviderRepository.GetAllAsync(queryDto);
 
             // Return a success result with the mapped DTOs
             return Result<IEnumerable<PaymentProviderDto>>.Success(paymentProviders.Select(MapPaymentProviderToDto));
@@ -50,21 +42,12 @@ namespace MiniPay.Application.Services
         public async Task<Result<PaymentProviderDto>> GetByIdAsync(int id)
         {
             // Attempt to retrieve the payment provider by ID
-            PaymentProvider? paymentProvider = null;
-            try
-            {
-                paymentProvider = await _paymentProviderRepository.GetByIdAsync(id);
-            }
-            catch (Exception ex)
-            {
-                // If an exception occurs, return a failure result
-                return Result<PaymentProviderDto>.Fail($"An error occurred while retrieving the payment provider with ID {id}: {ex.Message}", 500);
-            }
+            PaymentProvider? paymentProvider = await _paymentProviderRepository.GetByIdAsync(id);
 
             // If the payment provider is not found, return a failure result
             if (paymentProvider == null)
             {
-                return Result<PaymentProviderDto>.Fail($"Payment provider with ID {id} not found.", 201);
+                throw new RetrievalException($"Payment provider with ID {id} not found.");
             }
 
             // Return a success result with the mapped DTO
@@ -82,7 +65,7 @@ namespace MiniPay.Application.Services
             // Validate the input DTO
             if (!Enum.TryParse<Currency>(createDto.Currency.ToUpper(), out var currency))
             {
-                return Result<PaymentProviderDto>.Fail($"Invalid currency: {createDto.Currency}", 422);
+                throw new ValidationException($"Invalid currency: {createDto.Currency}");
             }
 
             // Create a new PaymentProvider instance from the DTO
@@ -99,16 +82,7 @@ namespace MiniPay.Application.Services
 
 
             // Attempt to create the payment provider in the repository
-            PaymentProvider? createdPaymentProvider = null;
-            try
-            {
-                createdPaymentProvider = await _paymentProviderRepository.CreateAsync(paymentProvider);
-            }
-            catch (Exception ex)
-            {
-                // If an exception occurs, return a failure result
-                return Result<PaymentProviderDto>.Fail($"An error occurred while creating the payment provider: {ex.Message}", 500);
-            }
+            PaymentProvider? createdPaymentProvider = await _paymentProviderRepository.CreateAsync(paymentProvider);
 
             return Result<PaymentProviderDto>.Success(MapPaymentProviderToDto(createdPaymentProvider));
         }
@@ -123,27 +97,18 @@ namespace MiniPay.Application.Services
         public async Task<Result<PaymentProviderDto>> UpdateAsync(int id, UpdatePaymentProviderDto updateDto)
         {
             // Attempt to retrieve the existing payment provider by ID
-            PaymentProvider? existingPaymentProvider = null;
-            try
-            {
-                existingPaymentProvider = await _paymentProviderRepository.GetByIdAsync(id);
-            }
-            catch (Exception ex)
-            {
-                // If an exception occurs, return a failure result
-                return Result<PaymentProviderDto>.Fail($"An error occurred while retrieving the payment provider with ID {id}: {ex.Message}", 500);
-            }
+            PaymentProvider? existingPaymentProvider = await _paymentProviderRepository.GetByIdAsync(id);
 
             // If the payment provider does not exist, return a failure result
             if (existingPaymentProvider == null)
             {
-                return Result<PaymentProviderDto>.Fail($"Payment provider with ID {id} not found.", 201);
+                throw new RetrievalException($"Payment provider with ID {id} not found.");
             }
 
             // Validate the input DTO
             if (!Enum.TryParse<Currency>(updateDto.Currency.ToUpper(), out var currency))
             {
-                return Result<PaymentProviderDto>.Fail($"Invalid currency: {updateDto.Currency}", 422);
+                throw new ValidationException($"Invalid currency: {updateDto.Currency}");
             }
 
             // Create a new PaymentProvider instance with the updated values
@@ -160,21 +125,12 @@ namespace MiniPay.Application.Services
             };
 
             // Attempt to update the payment provider in the repository
-            PaymentProvider? updatedPaymentProvider = null;
-            try
-            {
-                updatedPaymentProvider = await _paymentProviderRepository.UpdateAsync(id, paymentProvider);
-            }
-            catch (Exception ex)
-            {
-                // If an exception occurs, return a failure result
-                return Result<PaymentProviderDto>.Fail($"An error occurred while updating the payment provider with ID {id}: {ex.Message}", 500);
-            }
+            PaymentProvider? updatedPaymentProvider = await _paymentProviderRepository.UpdateAsync(id, paymentProvider);
 
             // If the update failed and returned null, return a failure result
             if (updatedPaymentProvider == null)
             {
-                return Result<PaymentProviderDto>.Fail($"Failed to update payment provider with ID {id}.", 500);
+                throw new WriteException($"Failed to update payment provider with ID {id}. It may not exist or the update operation failed.");
             }
 
             // Return a success result with the mapped DTO
@@ -190,23 +146,15 @@ namespace MiniPay.Application.Services
         public async Task<Result<bool>> DeleteAsync(int id)
         {
             // Attempt to delete the payment provider by ID
-            try
-            {
-                bool deleted = await _paymentProviderRepository.DeleteAsync(id);
-                
-                if (!deleted)
-                {
-                    // If the deletion was not successful, return a failure result
-                    return Result<bool>.Fail($"Payment provider with ID {id} could not be deleted.", 400);
-                }
+            bool deleted = await _paymentProviderRepository.DeleteAsync(id);
 
-                return Result<bool>.Success(deleted);
-            }
-            catch (Exception ex)
+            if (!deleted)
             {
-                // If an exception occurs, return a failure result
-                return Result<bool>.Fail($"An error occurred while deleting the payment provider with ID {id}: {ex.Message}", 500);
+                // If the deletion was not successful, return a failure result
+                throw new WriteException($"Payment provider with ID {id} could not be deleted. It may not exist or the deletion operation failed.");
             }
+
+            return Result<bool>.Success(deleted);
         }
 
         /**

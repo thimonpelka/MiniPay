@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MiniPay.Application.Data;
+using MiniPay.Application.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,8 @@ builder.Services.AddScoped<MiniPay.Application.Services.ITransactionService, Min
 builder.Services.AddHttpClient<MiniPay.Application.Services.IHTTPRequestService, MiniPay.Application.Services.HTTPRequestService>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
