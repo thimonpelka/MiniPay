@@ -32,14 +32,9 @@ namespace MiniPay.Application.Controllers
             _logger.LogInformation("Getting all payment providers");
 
             // Call the service to get all payment providers
-            var result = await _paymentProviderService.GetAllAsync(queryParams);
+            var paymentProviders = await _paymentProviderService.GetAllAsync(queryParams);
 
-            if (!result.IsSuccess || result.Data == null)
-            {
-                return StatusCode(result.ErrorCode, result.ErrorMessage);
-            }
-
-            return Ok(result.Data);
+            return Ok(paymentProviders);
         }
 
         /**
@@ -53,14 +48,9 @@ namespace MiniPay.Application.Controllers
         {
             _logger.LogInformation($"Getting payment provider with ID: {id}");
 
-            var result = await _paymentProviderService.GetByIdAsync(id);
+            var paymentProvider = await _paymentProviderService.GetByIdAsync(id);
 
-            if (!result.IsSuccess || result.Data == null)
-            {
-                return StatusCode(result.ErrorCode, result.ErrorMessage);
-            }
-
-            return Ok(result.Data);
+            return Ok(paymentProvider);
         }
 
         /**
@@ -79,15 +69,10 @@ namespace MiniPay.Application.Controllers
 
             _logger.LogInformation("Creating a new payment provider");
 
-            var result = await _paymentProviderService.CreateAsync(createDto);
-
-            if (!result.IsSuccess || result.Data == null)
-            {
-                return StatusCode(result.ErrorCode, result.ErrorMessage);
-            }
+            var createdPaymentProvider = await _paymentProviderService.CreateAsync(createDto);
 
             // return CreatedAtAction(nameof(GetByIdAsync), new { id = result.Data.Id }, result.Data);
-            return StatusCode(201, result.Data);
+            return StatusCode(201, createdPaymentProvider);
         }
 
         /**
@@ -107,14 +92,9 @@ namespace MiniPay.Application.Controllers
 
             _logger.LogInformation($"Updating payment provider with ID: {id}");
 
-            var result = await _paymentProviderService.UpdateAsync(id, updateDto);
+            var updatedPaymentProvider = await _paymentProviderService.UpdateAsync(id, updateDto);
 
-            if (!result.IsSuccess || result.Data == null)
-            {
-                return StatusCode(result.ErrorCode, result.ErrorMessage);
-            }
-
-            return Ok(result.Data);
+            return Ok(updatedPaymentProvider);
         }
 
         /**
@@ -130,9 +110,9 @@ namespace MiniPay.Application.Controllers
 
             var result = await _paymentProviderService.DeleteAsync(id);
 
-            if (!result.IsSuccess)
+            if (!result)
             {
-                return StatusCode(result.ErrorCode, result.ErrorMessage);
+                return NotFound($"Payment provider with ID {id} not found.");
             }
 
             return NoContent();

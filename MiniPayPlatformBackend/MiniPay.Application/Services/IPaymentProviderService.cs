@@ -1,5 +1,4 @@
 using MiniPay.Application.DTOs;
-using MiniPay.Application.Shared;
 
 namespace MiniPay.Application.Services {
     /**
@@ -7,10 +6,10 @@ namespace MiniPay.Application.Services {
      */
     public interface IPaymentProviderService
     {
-        Task<Result<IEnumerable<PaymentProviderDto>>> GetAllAsync(PaymentProviderQueryDto queryDto);
-        Task<Result<PaymentProviderDto>> GetByIdAsync(int id);
-        Task<Result<PaymentProviderDto>> CreateAsync(CreatePaymentProviderDto createDto);
-        Task<Result<PaymentProviderDto>> UpdateAsync(int id, UpdatePaymentProviderDto updateDto);
-        Task<Result<bool>> DeleteAsync(int id);
+        Task<IEnumerable<PaymentProviderDto>> GetAllAsync(PaymentProviderQueryDto queryDto);
+        Task<PaymentProviderDto> GetByIdAsync(int id);
+        Task<PaymentProviderDto> CreateAsync(CreatePaymentProviderDto createDto);
+        Task<PaymentProviderDto> UpdateAsync(int id, UpdatePaymentProviderDto updateDto);
+        Task<bool> DeleteAsync(int id);
     }
 }

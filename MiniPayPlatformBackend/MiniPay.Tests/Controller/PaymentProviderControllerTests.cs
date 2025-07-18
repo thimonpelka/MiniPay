@@ -5,6 +5,7 @@ using MiniPay.Application.DTOs;
 using MiniPay.Application.Services;
 using MiniPay.Application.Controllers;
 using MiniPay.Application.Shared;
+using MiniPay.Application.Exceptions;
 
 namespace MiniPay.Tests.Services
 {
@@ -57,8 +58,7 @@ namespace MiniPay.Tests.Services
             // Arrange
             _paymentProviderServiceMock
                 .Setup(s => s.GetAllAsync(_emptyQueryDto))
-                .ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
-                .Success(_mockPaymentProviders));
+                .ReturnsAsync(_mockPaymentProviders);
 
             // Act
             var result = await _controller.GetAllAsync(_emptyQueryDto);
@@ -82,8 +82,7 @@ namespace MiniPay.Tests.Services
 			// Arrange
 			_paymentProviderServiceMock
 				.Setup(s => s.GetAllAsync(_emptyQueryDto))
-				.ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
-				.Success(new List<PaymentProviderDto>()));
+				.ReturnsAsync(new List<PaymentProviderDto>());
 
 			// Act
 			var result = await _controller.GetAllAsync(_emptyQueryDto);
@@ -107,8 +106,7 @@ namespace MiniPay.Tests.Services
 			// Arrange
 			_paymentProviderServiceMock
 				.Setup(s => s.GetAllAsync(_isActiveQueryDto))
-				.ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
-				.Success(_mockPaymentProviders.Where(p => p.IsActive)));
+				.ReturnsAsync(_mockPaymentProviders.Where(p => p.IsActive));
 
 			// Act
 			var result = await _controller.GetAllAsync(_isActiveQueryDto);
@@ -133,8 +131,7 @@ namespace MiniPay.Tests.Services
             // Arrange
             _paymentProviderServiceMock
                 .Setup(s => s.GetByIdAsync(1))
-                .ReturnsAsync(Result<PaymentProviderDto>
-                .Success(_mockPaymentProviders[0]));
+                .ReturnsAsync(_mockPaymentProviders[0]);
 
             // Act
             var result = await _controller.GetByIdAsync(1);
@@ -157,8 +154,7 @@ namespace MiniPay.Tests.Services
             // Arrange
             _paymentProviderServiceMock
                 .Setup(s => s.GetByIdAsync(999))
-                .ReturnsAsync(Result<PaymentProviderDto>
-                .Fail("Provider not found", 404));
+                .Throws(new RetrievalException("Provider not found"));
 
             // Act
             var result = await _controller.GetByIdAsync(999);
@@ -166,6 +162,7 @@ namespace MiniPay.Tests.Services
             // Assert
             Assert.IsType<ActionResult<PaymentProviderDto>>(result);
             var actionResult = result.Result as ObjectResult;
+
             Assert.NotNull(actionResult);
             Assert.Equal(404, actionResult.StatusCode);
             Assert.Equal("Provider not found", actionResult.Value);
@@ -177,8 +174,7 @@ namespace MiniPay.Tests.Services
             // Arrange
             _paymentProviderServiceMock
                 .Setup(s => s.GetAllAsync(_emptyQueryDto))
-                .ReturnsAsync(Result<IEnumerable<PaymentProviderDto>>
-                .Fail("Internal server error", 500));
+                .Throws(new Exception("Internal server error"));
 
             // Act
             var result = await _controller.GetAllAsync(_emptyQueryDto);

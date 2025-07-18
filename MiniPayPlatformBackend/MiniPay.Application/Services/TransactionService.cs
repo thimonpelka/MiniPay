@@ -26,16 +26,10 @@ namespace MiniPay.Application.Services
         public async Task<Result<TransactionResultDto>> ExecuteTransactionAsync(TransactionRequestDto requestDto)
         {
             // Get the payment provider by ID to ensure it exists
-            var resultPaymentProvider = await _paymentProviderService.GetByIdAsync(requestDto.PaymentProviderId);
-
-            // If the payment provider is not found or an error occurs, return a failure result
-            if (!resultPaymentProvider.IsSuccess || resultPaymentProvider.Data == null)
-            {
-                return Result<TransactionResultDto>.Fail(resultPaymentProvider.ErrorMessage, resultPaymentProvider.ErrorCode);
-            }
+            var paymentProvider = await _paymentProviderService.GetByIdAsync(requestDto.PaymentProviderId);
 
             // Send the HTTP request using the HTTP request service
-            var response = await _httpRequestService.sendHTTPRequest(requestDto, resultPaymentProvider.Data);
+            var response = await _httpRequestService.sendHTTPRequest(requestDto, paymentProvider);
 
             // Check if the HTTP request was successful
             if (!response.IsSuccess || response.Data == null)

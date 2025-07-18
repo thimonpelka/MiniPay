@@ -24,13 +24,13 @@ namespace MiniPay.Application.Services
          * @param queryDto The query parameters for filtering.
          * @return A result containing a collection of payment provider DTOs or an error message.
          */
-        public async Task<Result<IEnumerable<PaymentProviderDto>>> GetAllAsync(PaymentProviderQueryDto queryDto)
+        public async Task<IEnumerable<PaymentProviderDto>> GetAllAsync(PaymentProviderQueryDto queryDto)
         {
             // Retrieve all payment providers from the repository
             IEnumerable<PaymentProvider> paymentProviders = await _paymentProviderRepository.GetAllAsync(queryDto);
 
             // Return a success result with the mapped DTOs
-            return Result<IEnumerable<PaymentProviderDto>>.Success(paymentProviders.Select(MapPaymentProviderToDto));
+            return paymentProviders.Select(MapPaymentProviderToDto);
         }
 
         /**
@@ -39,7 +39,7 @@ namespace MiniPay.Application.Services
          * @param id The ID of the payment provider to retrieve.
          * @return A result containing the payment provider DTO or an error message.
          */
-        public async Task<Result<PaymentProviderDto>> GetByIdAsync(int id)
+        public async Task<PaymentProviderDto> GetByIdAsync(int id)
         {
             // Attempt to retrieve the payment provider by ID
             PaymentProvider? paymentProvider = await _paymentProviderRepository.GetByIdAsync(id);
@@ -51,7 +51,7 @@ namespace MiniPay.Application.Services
             }
 
             // Return a success result with the mapped DTO
-            return Result<PaymentProviderDto>.Success(MapPaymentProviderToDto(paymentProvider));
+            return MapPaymentProviderToDto(paymentProvider);
         }
 
         /**
@@ -60,7 +60,7 @@ namespace MiniPay.Application.Services
          * @param createDto The DTO containing the details of the payment provider to create.
          * @return A result containing the created payment provider DTO or an error message.
          */
-        public async Task<Result<PaymentProviderDto>> CreateAsync(CreatePaymentProviderDto createDto)
+        public async Task<PaymentProviderDto> CreateAsync(CreatePaymentProviderDto createDto)
         {
             // Validate the input DTO
             if (!Enum.TryParse<Currency>(createDto.Currency.ToUpper(), out var currency))
@@ -82,9 +82,9 @@ namespace MiniPay.Application.Services
 
 
             // Attempt to create the payment provider in the repository
-            PaymentProvider? createdPaymentProvider = await _paymentProviderRepository.CreateAsync(paymentProvider);
+            PaymentProvider createdPaymentProvider = await _paymentProviderRepository.CreateAsync(paymentProvider);
 
-            return Result<PaymentProviderDto>.Success(MapPaymentProviderToDto(createdPaymentProvider));
+            return MapPaymentProviderToDto(createdPaymentProvider);
         }
 
         /**
@@ -94,7 +94,7 @@ namespace MiniPay.Application.Services
          * @param updateDto The DTO containing the updated details of the payment provider.
          * @return A result containing the updated payment provider DTO or an error message.
          */
-        public async Task<Result<PaymentProviderDto>> UpdateAsync(int id, UpdatePaymentProviderDto updateDto)
+        public async Task<PaymentProviderDto> UpdateAsync(int id, UpdatePaymentProviderDto updateDto)
         {
             // Attempt to retrieve the existing payment provider by ID
             PaymentProvider? existingPaymentProvider = await _paymentProviderRepository.GetByIdAsync(id);
@@ -134,7 +134,7 @@ namespace MiniPay.Application.Services
             }
 
             // Return a success result with the mapped DTO
-            return Result<PaymentProviderDto>.Success(MapPaymentProviderToDto(updatedPaymentProvider));
+            return MapPaymentProviderToDto(updatedPaymentProvider);
         }
 
         /**
@@ -143,7 +143,7 @@ namespace MiniPay.Application.Services
          * @param id The ID of the payment provider to delete.
          * @return A result indicating whether the deletion was successful or an error message.
          */
-        public async Task<Result<bool>> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             // Attempt to delete the payment provider by ID
             bool deleted = await _paymentProviderRepository.DeleteAsync(id);
@@ -154,7 +154,7 @@ namespace MiniPay.Application.Services
                 throw new WriteException($"Payment provider with ID {id} could not be deleted. It may not exist or the deletion operation failed.");
             }
 
-            return Result<bool>.Success(deleted);
+            return deleted;
         }
 
         /**
